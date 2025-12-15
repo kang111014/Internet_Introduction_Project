@@ -27,9 +27,6 @@ function App() {
     { code: 'KRW', name: '🇰🇷 韓元 (KRW)' },
   ];
   
-  // ⚠️⚠️ 請記得填入你的 API Key ⚠️⚠️
-  const GNEWS_API_KEY = "9bb657395dc63efdf082c82e33b15f16"; 
-
   // 獨立出來的抓匯率功能
   const fetchRateData = async () => {
     setRateLoading(true);
@@ -66,28 +63,36 @@ function App() {
     }
   };
 
-  // 獨立出來的抓新聞功能 (加上 useCallback 避免重複渲染)
+  // 修改後的 fetchNewsData
   const fetchNewsData = useCallback(async () => {
     setNewsLoading(true);
-    if (!GNEWS_API_KEY || GNEWS_API_KEY.includes("貼在這裡")) {
-      setNewsLoading(false);
-      return;
-    }
 
     try {
-      // 搜尋策略調整：
-      // 1. 為了讓新聞更多，我們主要搜尋 "目標貨幣(例如 JPY) + Finance"
-      // 2. max=6：抓取 6 則新聞填滿畫面
-      const query = `${toCurrency} finance`; 
-      const response = await axios.get(`https://gnews.io/api/v4/search?q=${query}&lang=en&max=6&apikey=${GNEWS_API_KEY}`);
+      // 搜尋關鍵字
+      const queryParam = `${toCurrency} finance`; 
       
-      setNewsList(response.data.articles);
+      // 🚀 關鍵修改：
+      // 我們不再直接 fetch gnews.io
+      // 而是 fetch 我們剛剛建立的後端路徑 "/api/news"
+      const response = await axios.get(`/api/news?query=${queryParam}`);
+      
+      // 檢查回傳結果
+      if (response.data.articles && response.data.articles.length > 0) {
+        setNewsList(response.data.articles);
+      } else {
+        // 如果 API 沒錯但剛好沒新聞，顯示空陣列或假資料都可以
+        // 這裡我們清空，讓畫面顯示 "暫無相關新聞"
+        setNewsList([]); 
+      }
       setNewsLoading(false);
+
     } catch (error) {
-      console.error("新聞 API 錯誤:", error);
+      console.error("新聞抓取失敗:", error);
+      // 如果連自己的後端都掛了，這裡可以考慮放回假資料 Mock Data 當作最後防線
+      // 但照理說 Vercel Function 是很穩定的
       setNewsLoading(false);
     }
-  }, [toCurrency, GNEWS_API_KEY]); // 當目標貨幣改變時，此函式會更新
+  }, [toCurrency]);
 
   // 當幣別改變時，執行這兩個功能
   useEffect(() => {
