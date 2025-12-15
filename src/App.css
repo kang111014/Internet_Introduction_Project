@@ -1,0 +1,134 @@
+/* 設定整個背景 */
+.app-container {
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.dashboard-card {
+  background-color: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 1000px; /* 寬度加大一點，容納更多新聞 */
+}
+
+.title {
+  color: #202124;
+  margin-bottom: 30px;
+  font-size: 28px;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* 選擇器樣式 */
+.selector-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 12px;
+}
+.select-group label { font-size: 14px; color: #555; font-weight: 600; margin-bottom: 5px; display: block;}
+.currency-select { padding: 10px; font-size: 16px; border-radius: 8px; border: 1px solid #ccc; }
+.swap-icon { font-size: 20px; color: #555; padding-top: 20px; }
+
+/* 匯率顯示 */
+.rate-section { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+.rate-display { font-size: 56px; font-weight: 700; color: #1a73e8; }
+.description { color: #666; font-size: 18px; }
+
+/* 圖表 */
+.chart-section { margin-bottom: 40px; }
+.section-title { font-size: 20px; color: #202124; margin-bottom: 15px; font-weight: 600; border-left: 4px solid #1a73e8; padding-left: 12px; }
+.chart-container { height: 350px; width: 100%; }
+.loading-text { display: flex; justify-content: center; align-items: center; height: 100%; color: #888; }
+
+/* --- 新聞區塊與按鈕 --- */
+.news-header {
+  display: flex;
+  justify-content: space-between; /* 標題靠左，按鈕靠右 */
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.refresh-btn {
+  background-color: #f1f3f4;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #1a73e8;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.refresh-btn:hover { background-color: #e8f0fe; }
+.refresh-btn:disabled { color: #aaa; cursor: not-allowed; }
+
+/* --- 新聞網格排版 (關鍵修改) --- */
+.news-grid {
+  display: grid;
+  /* 強制最少 2 欄，空間夠就 3 欄 */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.news-card {
+  text-decoration: none;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  height: 280px; /* 固定卡片高度，讓排版整齊 */
+}
+
+.news-card:hover { transform: translateY(-5px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+
+.news-image {
+  height: 140px; /* 固定圖片高度 */
+  background-size: cover;
+  background-position: center;
+}
+
+.news-content {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.news-title {
+  font-size: 15px;
+  color: #202124;
+  margin: 0 0 5px 0;
+  line-height: 1.4;
+  font-weight: 600;
+  /* 限制標題最多 3 行 */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.news-source { font-size: 12px; color: #5f6368; margin: 0; }
+.no-news { text-align: center; color: #888; grid-column: 1 / -1; padding: 20px; }
+
+/* 手機版適配 */
+@media (max-width: 600px) {
+  .selector-container { flex-direction: column; }
+  .swap-icon { transform: rotate(90deg); padding-top: 0; margin: 10px 0; }
+  .news-card { height: auto; } /* 手機版不限高度 */
+}
