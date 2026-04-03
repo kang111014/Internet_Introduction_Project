@@ -4,7 +4,7 @@ export default async function handler(request, response) {
   const { query } = request.query;
 
   // ⚠️⚠️ 請在這裡填入你的 GNews API Key ⚠️⚠️
-  const API_KEY = "9bb657395dc63efdf082c82e33b15f16";
+  const API_KEY = "";
 
   if (!query) {
     return response.status(400).json({ error: "Missing query parameter" });
